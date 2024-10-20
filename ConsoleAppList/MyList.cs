@@ -25,7 +25,31 @@ public class MyList()
     }
     public void Insert(int add, int index)
     {
-
+        _counter++;
+        int[] temp1 = new int[index + 1];
+        for (int i = 0; i < index; i++)
+        {
+            temp1[i] = arr[i];
+        }
+        temp1[index] = add;
+        // вкладываем в первый временный массив часть исходного и дополнительный элемент
+        int[] temp2 = new int[arr.Length - (temp1.Length - 1)];
+        for (int i = index; i < arr.Length; i++)
+        {
+            temp2[i - index] = arr[i];
+        }
+        // переписываем отстатки записываем во второй временный массив
+        int[] temp3 = new int[temp1.Length + temp2.Length];
+        for (int i = 0; i < temp1.Length; i++)
+        {
+            temp3[i] = temp1[i];
+        }
+        for (int i = temp1.Length; i < temp3.Length; i++)
+        {
+            temp3[i] = temp2[i - temp1.Length];
+        }
+        // временные массивы склеиваются в один и клонируются в основной
+        arr = (int[])temp3.Clone();
     }
     public void Remove(int rem)
     {

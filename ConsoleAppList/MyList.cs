@@ -20,7 +20,7 @@ public class MyList()
             // перенос элементов во временный массив
         }
         temp[_counter - 1] = add;
-        arr = (int[])temp.Clone();
+        arr = temp;
         // добавление нового элемента и клонирование временного масива
     }
     public void Insert(int add, int index)
@@ -49,7 +49,7 @@ public class MyList()
             temp3[i] = temp2[i - temp1.Length];
         }
         // временные массивы склеиваются в один и клонируются в основной
-        arr = (int[])temp3.Clone();
+        arr = temp3;
     }
     public void Remove(int rem)
     {
@@ -105,13 +105,13 @@ public class MyList()
                 temp3[i] = temp2[i - temp1.Length];
             }
             // временные массивы склеиваются в один и клонируются в основной
-            arr = (int[])temp3.Clone();
+            arr = temp3;
         }
     }
     public void Clear()
     {
         int[] temp = new int[0];
-        arr = (int[])temp.Clone();
+        arr = temp;
         _counter = 0;
         // присваивание массиву новый пустой массив
     }

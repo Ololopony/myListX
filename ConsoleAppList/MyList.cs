@@ -4,13 +4,13 @@ using System.Runtime.ConstrainedExecution;
 using System.Diagnostics;
 using System.Data.Common;
 
-public class MyList()
+public class MyList<T>()
 {
-    int[] arr = new int[4];
+    T[] arr = new T[4];
     int _counter;
     public int Count { get { return _counter; }}
 
-    public void Add(int add)
+    public void Add(T add)
     {
         _counter++;
         if (_counter > arr.Length)
@@ -19,14 +19,14 @@ public class MyList()
         }
         arr[_counter - 1] = add;
     }
-    public void Insert(int add, int index)
+    public void Insert(T add, int index)
     {
         _counter++;
         if (_counter > arr.Length)
         {
             Resize();
         }
-        int[] temp1 = new int[_counter - index];
+        T[] temp1 = new T[_counter - index];
         for (int i = index; i < _counter; i++)
         {
             temp1[i - index] = arr[i];
@@ -37,32 +37,16 @@ public class MyList()
             arr[i] = temp1[i - (index + 1)];
         }
     }
-    public void Remove(int rem)
+    public void Remove(T rem)
     {
-        if (_counter == 0)
-        {
-            throw new ArgumentOutOfRangeException("Список не содержет элементов");
-        }
-        // обработка случая, когда список пуст
-        int ind = -1;
-        for (int i = 0; i < arr.Length - 1; i++)
-        {
-            if (arr[i] == rem)
-            {
-                ind = i;
-                break;
-            }
-        }
-        // метод находит индект элемента и удаляет его методом RemoveAt
-        RemoveAt(ind);
+        RemoveAt(IndexOfItem(rem));
     }
     public void RemoveAt(int index)
     {
         if (_counter == 0)
         {
-            throw new ArgumentOutOfRangeException("Список не содержет элементов");
+            throw new ArgumentOutOfRangeException("List is empty");
         }
-        // обработка случая, когда список пуст
         _counter--;
         if (_counter == 0)
         {
@@ -70,7 +54,7 @@ public class MyList()
         }
         else
         {
-            int[] temp1 = new int[_counter - index];
+            T[] temp1 = new T[_counter - index];
             for (int i = index + 1; i < _counter + 1; i++)
             {
                 temp1[i - (index + 1)] = arr[i];
@@ -83,19 +67,17 @@ public class MyList()
     }
     public void Clear()
     {
-        arr = new int[4];
+        arr = new T[4];
         _counter = 0;
-        // присваиваем массиву новый пустой массив
     }
     public void Resize()
     {
-        int[] arrTemp = new int[arr.Length * 2];
+        T[] arrTemp = new T[arr.Length * 2];
         for (int i = 0; i < arr.Length; i++)
         {
             arrTemp[i] = arr[i];
         }
         arr = arrTemp;
-        // выделение нового места для элементов списка
     }
     public string ListToString()
     {
@@ -108,7 +90,60 @@ public class MyList()
                 s += ", ";
             }
         }
-        // вывод элементов списка в виде строки
         return s;
+    }
+    public int IndexOfItem(T item)
+    {
+        if (item is not null)
+        {
+            for (int i = 0; i < arr.Length - 1; i++)
+            {
+                if (item.Equals(arr[i]))
+                {
+                    return i;
+                }
+            }
+            throw new Exception("Item was not found");
+        }
+        else
+        {
+            throw new Exception("Collection's item is null");
+        }
+    }
+    public void ForeEachItem(System.Action<T> action)
+    {
+        for (int i = 0; i < _counter; i++)
+        {
+            action(arr[i]);
+        }
+    }
+    public T? Find(System.Func<T, bool> predicate)
+    {
+        for (int i = 0; i < _counter; i++)
+        {
+            if (predicate(arr[i]))
+            {
+                return arr[i];
+            }
+        }
+        return default(T);
+    }
+    /*public T? Find(System.Predicate<T> match)
+    {
+        for (int i = 0; i < _counter; i++)
+        {
+            if (match(arr[i]))
+            {
+                return arr[i];
+            }
+        }
+        return default(T);
+    }*/
+    public void Sort(System.Func<T, T, T> sort)
+    {
+        for (int i = 0; i < _counter; i++)
+        {
+            arr[i] = sort(arr[i], arr[i + 1]);
+        }
     }
 }

@@ -139,11 +139,23 @@ public class MyList<T>()
         }
         return default(T);
     }*/
-    public void Sort(System.Func<T, T, T> sort)
+    public void Sort(System.Func<T, T, int> sort)
     {
         for (int i = 0; i < _counter; i++)
         {
-            arr[i] = sort(arr[i], arr[i + 1]);
+            for (int j = 0; j < _counter - i - 1; j++)
+            {
+                if (sort(arr[j], arr[j + 1]) == 1)
+                {
+                    Swap(ref arr[j], ref arr[j + 1]);
+                }
+            }
         }
+    }
+    static private void Swap(ref T a, ref T b)
+    {
+        T t = a;
+        a = b;
+        b = t;
     }
 }
